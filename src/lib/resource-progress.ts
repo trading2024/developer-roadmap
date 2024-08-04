@@ -85,7 +85,33 @@ export function clearMigratedRoadmapProgress(
   resourceType: string,
   resourceId: string,
 ) {
-  const migratedRoadmaps = ['frontend', 'backend', 'devops', 'data-analyst', 'android'];
+  const migratedRoadmaps = [
+    'frontend',
+    'backend',
+    'devops',
+    'data-analyst',
+    'android',
+    'full-stack',
+    'ai-data-scientist',
+    'postgresql-dba',
+    'blockchain',
+    'qa',
+    'software-architect',
+    'cyber-security',
+    'ux-design',
+    'game-developer',
+    'server-side-game-developer',
+    'technical-writer',
+    'mlops',
+    'computer-science',
+    'react',
+    'vue',
+    'javascript',
+    'angular',
+    'nodejs',
+    'typescript',
+    'python',
+  ];
 
   if (!migratedRoadmaps.includes(resourceId)) {
     return;
@@ -360,6 +386,7 @@ export function refreshProgressCounters() {
 
   const totalClickable = getMatchingElements([
     '.clickable-group',
+    '[data-type="todo"]',
     '[data-type="topic"]',
     '[data-type="subtopic"]',
     '.react-flow__node-topic',
@@ -378,6 +405,9 @@ export function refreshProgressCounters() {
 
   const totalCheckBoxesDone = document.querySelectorAll(
     '[data-group-id^="check:"].done',
+  ).length;
+  const totalCheckBoxes2Done = document.querySelectorAll(
+    '[data-type="todo-checkbox"].done',
   ).length;
   const totalCheckBoxesLearning = document.querySelectorAll(
     '[data-group-id^="check:"].learning',
@@ -403,7 +433,9 @@ export function refreshProgressCounters() {
       '.clickable-group.done:not([data-group-id^="ext_link:"])',
       '[data-node-id].done', // All data-node-id=*.done elements are custom roadmap nodes
       '[data-id].done', // All data-id=*.done elements are custom roadmap nodes
-    ]).length - totalCheckBoxesDone;
+    ]).length -
+    totalCheckBoxesDone -
+    totalCheckBoxes2Done;
   const totalLearning =
     getMatchingElements([
       '.clickable-group.learning',
@@ -419,9 +451,9 @@ export function refreshProgressCounters() {
 
   const doneCountEls = document.querySelectorAll('[data-progress-done]');
   if (doneCountEls.length > 0) {
-    doneCountEls.forEach(
-      (doneCountEl) => (doneCountEl.innerHTML = `${totalDone}`),
-    );
+    doneCountEls.forEach((doneCountEl) => {
+      doneCountEl.innerHTML = `${totalDone + totalSkipped}`;
+    });
   }
 
   const learningCountEls = document.querySelectorAll(
